@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memanggil data dari server</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            justify-self: center;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        img {
+            width: 100px;
+            height: 75px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>
+        <center>
+            Data laporan desa bojongsoang
+        </center>
+    </h2>
+
+    <div class="container">
+        <table id="tableData">
+            <thead>
+                <tr>
+                    <th>ID laporan</th>
+                    <th>ID masyarakat</th>
+                    <th>kategori laporan</th>
+                    <th>judul laporan</th>
+                    <th>deskripsi laporan</th>
+                    <th>tanggal laporan</th>
+                    <th>status laporan</th>
+                    <th>lampiran</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    
+
+    <script>
+        // Membuat AJAX request
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                // Parse data JSON yang diterima
+                var data = JSON.parse(this.responseText);
+
+                // Mendapatkan referensi tbody dari tabel
+                var tableBody = document.getElementById("tableBody");
+
+                // Mengisi tabel dengan data JSON
+                data.forEach((laporan, index) => {
+                    var row = tableBody.insertRow();
+                    row.innerHTML = `
+        <td>${laporan.id_laporan}</td>
+        <td>${laporan.id_masyarakat}</td>
+        <td>${laporan.kategori_laporan}</td>
+        <td>${laporan.judul_laporan}</td>
+        <td>${laporan.deskripsi_laporan}</td>
+        <td>${laporan.tanggal_laporan}</td>
+        <td>${laporan.status_laporan}</td>
+        <td><img src='assets/${laporan.lampiran}' alt='lampiran'></td>
+    `;
+                });
+            }
+        };
+        xhttp.open("GET", "laporans.json", true);
+        xhttp.send();
+    </script>
+</body>
+
+</html>
